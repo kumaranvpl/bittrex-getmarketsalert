@@ -1,5 +1,6 @@
 import requests
 import json
+import smtplib
 
 try:
     with open('markets.json', 'r') as current_markets:
@@ -8,6 +9,7 @@ except IOError:
     before = requests.get('https://bittrex.com/api/v1.1/public/getmarkets').json()
     with open('markets.json', 'w') as current_markets:
         current_markets.write(json.dumps(before))
+    print("First run... Getting initial market data.")
 
 after = requests.get('https://bittrex.com/api/v1.1/public/getmarkets').json()
 
@@ -20,9 +22,22 @@ if new_set:
     with open('markets.json', 'w') as current_markets:
         current_markets.write(json.dumps(after))
     print('Bittrex has added the following pairs:')
-    print(new_set)    
-# List comprehension
+    for pair in new_set:
+        new_list = list([''.join((item) for item in pair)])
+        print(new_list)
 
-# add email scipt here
+    sender = 'example@example.com'
+    receivers = ['example@example.com']
 
-print ("\n...results sent via email.")
+    message = """
+    Bittrex has added the following pairs:\n + new_list + \n
+    Get 'em while they're juicy!
+    """
+
+    try:
+        smtpObj = smtplib.SMTP_SSL('smtp.gmail.com:465')
+        smtpObj.login('example@example.com','password')
+        smtpObj.sendmail(sender, receivers, message)         
+        print("\nSuccessfully sent email")
+    except SMTPException:
+       print("\nError: unable to send email")
