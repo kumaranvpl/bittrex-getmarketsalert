@@ -18,6 +18,9 @@ after_set = set([market['MarketName'] for market in  after['result']])
 
 new_set = after_set - before_set
 
+if not new_set:
+    print("No change... Exiting.")
+    quit()
 if new_set:
     with open('markets.json', 'w') as current_markets:
         current_markets.write(json.dumps(after))
