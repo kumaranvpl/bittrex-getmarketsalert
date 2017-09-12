@@ -35,8 +35,8 @@ if new_set:
     new_list = []
     for pair in new_set:
         new_list.append(pair)  # = [item for item in pair]
-
     print(new_list)
+    
     sender = 'example@example.com'
     receivers = ['example@example.com']
 
